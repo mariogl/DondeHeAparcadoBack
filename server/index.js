@@ -4,6 +4,10 @@ const chalk = require("chalk");
 const express = require("express");
 const morgan = require("morgan");
 
+const rutasUsuarios = require("./rutas/usuarios");
+const rutasVehiculos = require("./rutas/vehiculos");
+const rutasUbicaciones = require("./rutas/ubicaciones");
+
 const opcionesCLI = require("../parametrosCLI");
 const { error404, errorGeneral } = require("./errores");
 
@@ -24,8 +28,11 @@ server.on("error", (err) => {
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use("/usuarios", rutasUsuarios);
+app.use("/vehiculos", rutasVehiculos);
+app.use("/ubicaciones", rutasUbicaciones);
 app.get("/", (req, res, next) => {
-  res.send("hola");
+  res.redirect("/ubicaciones");
 });
 app.use(error404);
 app.use(errorGeneral);
