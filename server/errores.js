@@ -1,3 +1,5 @@
+const { validationResult } = require("express-validator");
+
 const creaError = (mensaje, codigoStatus = 500) => ({
   mensaje,
   codigoStatus,
@@ -14,8 +16,18 @@ const errorGeneral = (err, req, res, next) => {
   res.status(status).json({ error: true, msj: mensaje });
 };
 
+const checkBadRequest = (req, next, debug) => {
+  const resultadoErrores = validationResult(req);
+  if (!resultadoErrores.isEmpty()) {
+    const errores = resultadoErrores.mapped();
+    debug(errores);
+    return next(creaError("La petición no tiene la forma correcta", 400));
+  }
+};
+
 module.exports = {
   creaError,
   error404,
   errorGeneral,
+  checkBadRequest,
 };

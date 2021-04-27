@@ -1,5 +1,5 @@
 require("dotenv").config();
-const debug = require("debug")("DHE:server");
+const debug = require("debug")("DHA:server");
 const chalk = require("chalk");
 const express = require("express");
 const morgan = require("morgan");

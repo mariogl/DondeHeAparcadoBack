@@ -1,5 +1,5 @@
 require("dotenv").config();
-const debug = require("debug")("DHE:db");
+const debug = require("debug")("DHA:db");
 const chalk = require("chalk");
 const mongoose = require("mongoose");
 
