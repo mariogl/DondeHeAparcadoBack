@@ -3,6 +3,20 @@ const { creaError } = require("../../server/errores");
 const Usuario = require("../modelos/usuario");
 const Vehiculo = require("../modelos/vehiculo");
 
+const formateaColorHex = (hexColor) => {
+  if (hexColor[0] !== "#") {
+    hexColor = `#${hexColor}`;
+  }
+  let colorNumber = hexColor.slice(1);
+  if (colorNumber.length === 3) {
+    colorNumber = colorNumber
+      .split("")
+      .map((digito) => digito + digito)
+      .join("");
+  }
+  return `#${colorNumber}`;
+};
+
 const crearVehiculo = async (nuevoVehiculo) => {
   const usuarioExiste = await Usuario.findById(nuevoVehiculo.usuario);
   if (!usuarioExiste) {
@@ -17,6 +31,7 @@ const crearVehiculo = async (nuevoVehiculo) => {
       creaError("El usuario ya tiene un vehículo con ese nombre", 409)
     );
   } else {
+    nuevoVehiculo.color = formateaColorHex(nuevoVehiculo.color);
     const vehiculoCreado = await Vehiculo.create(nuevoVehiculo);
     return creaRespuesta(null, {
       id: vehiculoCreado.id,
@@ -25,6 +40,28 @@ const crearVehiculo = async (nuevoVehiculo) => {
   }
 };
 
+const sustituirVehiculo = async (nuevoVehiculo) => {
+  const usuarioExiste = await Usuario.findById(nuevoVehiculo.usuario);
+  if (!usuarioExiste) {
+    return creaRespuesta(creaError("No existe el usuario", 404));
+  }
+  const vehiculoExiste = await Vehiculo.findById(nuevoVehiculo.id);
+  if (!vehiculoExiste) {
+    return creaRespuesta(creaError("No existe el vehículo", 404));
+  } else {
+    nuevoVehiculo.color = formateaColorHex(nuevoVehiculo.color);
+    const vehiculoSustituido = await Vehiculo.findByIdAndUpdate(
+      nuevoVehiculo.id,
+      nuevoVehiculo
+    );
+    return creaRespuesta(null, {
+      id: vehiculoSustituido.id,
+      nombre: vehiculoSustituido.nombre,
+    });
+  }
+};
+
 module.exports = {
   crearVehiculo,
+  sustituirVehiculo,
 };

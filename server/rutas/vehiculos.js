@@ -1,9 +1,10 @@
 const express = require("express");
 const debug = require("debug")("DHA:rutas:vehiculos");
 const { checkSchema, param } = require("express-validator");
-const { crearVehiculo } = require("../../db/controladores/vehiculos");
-const Usuario = require("../../db/modelos/usuario");
-const Vehiculo = require("../../db/modelos/vehiculo");
+const {
+  crearVehiculo,
+  sustituirVehiculo,
+} = require("../../db/controladores/vehiculos");
 const { checkBadRequest, creaError } = require("../errores");
 const { vehiculoSchema } = require("../schemas/vehiculos");
 
@@ -40,7 +41,21 @@ router.put(
   "/:id",
   param("id", "Id incorrecta").isMongoId(),
   checkSchema(vehiculoSchema),
-  (req, res, next) => {}
+  checkBadRequest(debug),
+  async (req, res, next) => {
+    const nuevoVehiculo = req.body;
+    nuevoVehiculo.id = req.params.id;
+    const { idUsuario } = req;
+    if (nuevoVehiculo.usuario !== idUsuario) {
+      return next(creaError("Usuario incorrecto", 400));
+    }
+    const { error, datos } = await sustituirVehiculo(nuevoVehiculo);
+    if (error) {
+      return next(error);
+    } else {
+      res.json({ datos });
+    }
+  }
 );
 
 router.delete(
