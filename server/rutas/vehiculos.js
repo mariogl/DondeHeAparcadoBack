@@ -5,6 +5,7 @@ const {
   crearVehiculo,
   sustituirVehiculo,
   borrarVehiculo,
+  getVehiculo,
 } = require("../../db/controladores/vehiculos");
 const { checkBadRequest, creaError } = require("../errores");
 const { vehiculoSchema } = require("../schemas/vehiculos");
@@ -16,7 +17,15 @@ router.get("/", (req, res, next) => {});
 router.get(
   "/:id",
   param("id", "Id incorrecta").isMongoId(),
-  (req, res, next) => {}
+  checkBadRequest(debug),
+  async (req, res, next) => {
+    const { error, datos } = await getVehiculo(req.params.id, req.idUsuario);
+    if (error) {
+      return next(error);
+    } else {
+      res.json({ datos });
+    }
+  }
 );
 
 router.post(

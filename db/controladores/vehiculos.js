@@ -17,6 +17,21 @@ const formateaColorHex = (hexColor) => {
   return `#${colorNumber}`;
 };
 
+const getVehiculo = async (id, idUsuario) => {
+  const vehiculo = await Vehiculo.findOne(
+    {
+      _id: id,
+      usuario: idUsuario,
+    },
+    "nombre color"
+  );
+  if (!vehiculo) {
+    return creaRespuesta(creaError("No existe el vehículo", 404));
+  } else {
+    return creaRespuesta(null, vehiculo);
+  }
+};
+
 const crearVehiculo = async (nuevoVehiculo) => {
   const usuarioExiste = await Usuario.findById(nuevoVehiculo.usuario);
   if (!usuarioExiste) {
@@ -74,6 +89,7 @@ const borrarVehiculo = async (id, idUsuario) => {
 };
 
 module.exports = {
+  getVehiculo,
   crearVehiculo,
   sustituirVehiculo,
   borrarVehiculo,
