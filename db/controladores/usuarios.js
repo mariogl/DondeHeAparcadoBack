@@ -1,10 +1,9 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { creaRespuesta } = require(".");
 const { creaError } = require("../../server/errores");
 const Usuario = require("../modelos/usuario");
-
-const creaRespuesta = (error, datos) => ({ error, datos });
 
 const crearUsuario = async (nuevoUsuario) => {
   nuevoUsuario.password = await bcrypt.hash(nuevoUsuario.password, 10);
