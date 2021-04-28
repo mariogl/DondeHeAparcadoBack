@@ -17,6 +17,16 @@ const formateaColorHex = (hexColor) => {
   return `#${colorNumber}`;
 };
 
+const getVehiculos = async (idUsuario) => {
+  const vehiculos = await Vehiculo.find(
+    {
+      usuario: idUsuario,
+    },
+    "nombre color"
+  ).sort({ nombre: 1 });
+  return creaRespuesta(null, vehiculos);
+};
+
 const getVehiculo = async (id, idUsuario) => {
   const vehiculo = await Vehiculo.findOne(
     {
@@ -89,6 +99,7 @@ const borrarVehiculo = async (id, idUsuario) => {
 };
 
 module.exports = {
+  getVehiculos,
   getVehiculo,
   crearVehiculo,
   sustituirVehiculo,

@@ -6,13 +6,21 @@ const {
   sustituirVehiculo,
   borrarVehiculo,
   getVehiculo,
+  getVehiculos,
 } = require("../../db/controladores/vehiculos");
 const { checkBadRequest, creaError } = require("../errores");
 const { vehiculoSchema } = require("../schemas/vehiculos");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {});
+router.get("/", async (req, res, next) => {
+  const { error, datos } = await getVehiculos(req.idUsuario);
+  if (error) {
+    return next(error);
+  } else {
+    res.json({ datos });
+  }
+});
 
 router.get(
   "/:id",
