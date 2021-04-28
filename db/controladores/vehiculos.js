@@ -61,7 +61,20 @@ const sustituirVehiculo = async (nuevoVehiculo) => {
   }
 };
 
+const borrarVehiculo = async (id, idUsuario) => {
+  const vehiculoBorrado = await Vehiculo.findOneAndRemove({
+    _id: id,
+    usuario: idUsuario,
+  });
+  if (!vehiculoBorrado) {
+    return creaRespuesta(creaError("No existe el vehículo", 404));
+  } else {
+    return creaRespuesta(null, { id: vehiculoBorrado._id });
+  }
+};
+
 module.exports = {
   crearVehiculo,
   sustituirVehiculo,
+  borrarVehiculo,
 };

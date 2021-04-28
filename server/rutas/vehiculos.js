@@ -4,6 +4,7 @@ const { checkSchema, param } = require("express-validator");
 const {
   crearVehiculo,
   sustituirVehiculo,
+  borrarVehiculo,
 } = require("../../db/controladores/vehiculos");
 const { checkBadRequest, creaError } = require("../errores");
 const { vehiculoSchema } = require("../schemas/vehiculos");
@@ -61,7 +62,15 @@ router.put(
 router.delete(
   "/:id",
   param("id", "Id incorrecta").isMongoId(),
-  (req, res, next) => {}
+  checkBadRequest(debug),
+  async (req, res, next) => {
+    const { error, datos } = await borrarVehiculo(req.params.id, req.idUsuario);
+    if (error) {
+      return next(error);
+    } else {
+      res.json({ datos });
+    }
+  }
 );
 
 module.exports = router;
