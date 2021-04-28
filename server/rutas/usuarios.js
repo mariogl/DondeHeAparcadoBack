@@ -6,6 +6,7 @@ const {
   loginUsuario,
 } = require("../../db/controladores/usuarios");
 const { checkBadRequest } = require("../errores");
+const auth = require("../middlewares/auth");
 const {
   usuarioSchema,
   datosAccesoUsuarioSchema,
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.post(
   "/",
+  auth,
   checkSchema(usuarioSchema),
   checkBadRequest(debug),
   async (req, res, next) => {

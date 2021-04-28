@@ -10,6 +10,7 @@ const rutasUbicaciones = require("./rutas/ubicaciones");
 
 const opcionesCLI = require("../parametrosCLI");
 const { error404, errorGeneral } = require("./errores");
+const auth = require("./middlewares/auth");
 
 const app = express();
 const puerto = opcionesCLI.puerto || process.env.PUERTO || 6000;
@@ -29,8 +30,8 @@ server.on("error", (err) => {
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/usuarios", rutasUsuarios);
-app.use("/vehiculos", rutasVehiculos);
-app.use("/ubicaciones", rutasUbicaciones);
+app.use("/vehiculos", auth, rutasVehiculos);
+app.use("/ubicaciones", auth, rutasUbicaciones);
 app.get("/", (req, res, next) => {
   res.redirect("/ubicaciones");
 });
