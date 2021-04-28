@@ -16,7 +16,7 @@ const errorGeneral = (err, req, res, next) => {
   res.status(status).json({ error: true, msj: mensaje });
 };
 
-const checkBadRequest = (req, next, debug) => {
+const checkBadRequest = (debug) => (req, res, next) => {
   const resultadoErrores = validationResult(req);
   if (!resultadoErrores.isEmpty()) {
     const errores = resultadoErrores.mapped();

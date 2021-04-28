@@ -1,4 +1,4 @@
-const nuevoUsuarioSchema = {
+const usuarioSchema = {
   nombre: {
     exists: {
       errorMessage: "Falta el nombre",
@@ -54,6 +54,6 @@ const datosAccesoUsuarioSchema = {
 };
 
 module.exports = {
-  nuevoUsuarioSchema,
+  usuarioSchema,
   datosAccesoUsuarioSchema,
 };
