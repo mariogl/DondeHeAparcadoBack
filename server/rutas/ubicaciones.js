@@ -3,11 +3,17 @@ const express = require("express");
 const { checkSchema, param } = require("express-validator");
 const { checkBadRequest } = require("../errores");
 const ubicacionSchema = require("../schemas/ubicaciones");
+const { getUbicaciones } = require("../../db/controladores/ubicaciones");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.send("Listado de ubicaciones");
+router.get("/", async (req, res, next) => {
+  const { error, datos } = await getUbicaciones(req.idUsuario);
+  if (error) {
+    return next(error);
+  } else {
+    res.json({ datos });
+  }
 });
 
 router.get(
