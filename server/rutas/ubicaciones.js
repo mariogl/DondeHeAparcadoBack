@@ -6,6 +6,7 @@ const ubicacionSchema = require("../schemas/ubicaciones");
 const {
   getUbicaciones,
   crearUbicacion,
+  getUbicacion,
 } = require("../../db/controladores/ubicaciones");
 
 const router = express.Router();
@@ -28,7 +29,14 @@ router.get(
   "/:id",
   param("id", "Id incorrecta").isMongoId(),
   checkBadRequest(debug),
-  (req, res, next) => {}
+  async (req, res, next) => {
+    const { error, datos } = await getUbicacion(req.params.id, req.idUsuario);
+    if (error) {
+      return next(error);
+    } else {
+      res.json({ datos });
+    }
+  }
 );
 
 router.post(

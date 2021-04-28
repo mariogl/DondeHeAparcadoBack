@@ -15,6 +15,21 @@ const getUbicaciones = async (idUsuario, idVehiculo) => {
   return creaRespuesta(null, ubicaciones);
 };
 
+const getUbicacion = async (id, idUsuario) => {
+  const ubicacion = await Ubicacion.findOne(
+    {
+      _id: id,
+      usuario: idUsuario,
+    },
+    "localizacion fecha"
+  );
+  if (!ubicacion) {
+    return creaRespuesta(creaError("No existe la ubicación", 404));
+  } else {
+    return creaRespuesta(null, ubicacion);
+  }
+};
+
 const crearUbicacion = async (nuevaUbicacion) => {
   const usuarioExiste = await Usuario.findById(nuevaUbicacion.usuario);
   if (!usuarioExiste) {
@@ -34,5 +49,6 @@ const crearUbicacion = async (nuevaUbicacion) => {
 
 module.exports = {
   getUbicaciones,
+  getUbicacion,
   crearUbicacion,
 };
