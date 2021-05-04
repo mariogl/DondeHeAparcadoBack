@@ -2,6 +2,7 @@ require("dotenv").config();
 const debug = require("debug")("DHA:server");
 const chalk = require("chalk");
 const express = require("express");
+const cors = require("cors");
 const morgan = require("morgan");
 
 const rutasUsuarios = require("./rutas/usuarios");
@@ -27,7 +28,10 @@ server.on("error", (err) => {
   process.exit(1);
 });
 
+const origenesWhitelist = ["http://localhost"];
+
 app.use(morgan("dev"));
+app.use(cors(origenesWhitelist));
 app.use(express.json());
 app.use("/usuarios", rutasUsuarios);
 app.use("/vehiculos", auth, rutasVehiculos);
